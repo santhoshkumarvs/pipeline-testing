@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repo') {
           steps {
             sh 'rm -rf pipeline-testing'
-            sh 'git clone '
+            sh 'git clone https://github.com/santhoshkumarvs/pipeline-testing.git'
             }
         }
 
@@ -19,14 +19,14 @@ pipeline {
 
         stage('Push Image to Docker Hub') {
           steps {
-           sh    'docker push sreeharshav/pipelinetesttesting:${BUILD_NUMBER}'
+           sh    'docker push sreeharshav/pipelinetest-testing:${BUILD_NUMBER}'
            }
         }
 
         stage('Deploy to Docker Host') {
           steps {
             sh    'docker -H tcp://10.1.1.100:2375 stop testingwebapp1 || true'
-            sh    'docker -H tcp://10.1.1.100:2375 run --rm -dit --name testingwebapp1 --hostname prodwebapp1 -p 8000:80 sreeharshav/pipelinetestprod:${BUILD_NUMBER}'
+            sh    'docker -H tcp://10.1.1.100:2375 run --rm -dit --name testingwebapp1 --hostname testingwebapp1 -p 8001:80 sreeharshav/pipelinetestprod:${BUILD_NUMBER}'
             }
         }
 
